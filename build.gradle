@@ -4,9 +4,9 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.7'
 }
 
-group = 'io.codesirius'
+group = 'io.heapdog'
 version = '0.0.1-SNAPSHOT'
-description = 'codesirius'
+description = 'HeapDog Core Service'
 
 java {
 	toolchain {
