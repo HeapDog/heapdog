@@ -1,4 +1,4 @@
-package core.security.jwt;
+package io.heapdog.core.security.jwt;
 
 import org.junit.jupiter.api.Test;
 
