@@ -19,7 +19,7 @@ bcrypt:
   strength: ${BCRYPT_SALT_ROUNDS:10}
 
 jwt:
-  secret: lkjklhd098239oiu32kj32op8903hkjl3hjk3bv09832o9iuj3lk
+  secret:${JWT_SECRET}
 
 logging:
   level:
