@@ -1,6 +1,8 @@
 package io.heapdog.core.service;
 
 
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jwt.JWTClaimsSet;
 import io.heapdog.core.UserMapper;
 import io.heapdog.core.dto.SigninRequestDto;
 import io.heapdog.core.dto.SigninResponseDto;
@@ -10,8 +12,7 @@ import io.heapdog.core.exception.DuplicateUsernameException;
 import io.heapdog.core.model.HeapDogUser;
 import io.heapdog.core.repository.HeapDogUserRepository;
 import io.heapdog.core.security.jwt.JWTUtils;
-import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jwt.JWTClaimsSet;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -48,7 +49,7 @@ public class HeapDogUserService {
                 .build();
     }
 
-    public SignupResponseDto createUser(SignupRequestDto dto) {
+    public SignupResponseDto createUser(@Valid SignupRequestDto dto) {
         dto.setPassword(encoder.encode(dto.getPassword()));
         HeapDogUser user = mapper.toEntity(dto);
         user.setRole(Set.of(HeapDogUser.Role.ROLE_USER));
