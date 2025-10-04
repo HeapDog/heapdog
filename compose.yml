@@ -1,0 +1,37 @@
+services:
+  devcontainer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        USER: ${USER} # same as your host user
+        USER_UID: ${UID:-1000}
+    volumes:
+      - .:/home/${USER}/heapdog:cached
+      - jetbrains_cache:/home/${USER}/.cache/JetBrains
+    ports:
+      - 8080:8080
+    env_file:
+      - .env
+    working_dir: /home/${USER}/heapdog
+    depends_on:
+      - db
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${DB_USER:-postgres}", "-d", "${DB_NAME:-heapdog}"]
+      interval: 5s
+      retries: 3
+
+  db:
+    image: postgres:18.0-alpine3.22
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-}
+      POSTGRES_DB: ${DB_NAME:-heapdog}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+volumes:
+  db_data:
+  jetbrains_cache:

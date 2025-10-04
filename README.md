@@ -18,9 +18,15 @@
 #### IntelliJ IDEA
 TBD
 ### Recommended: Using DevPods
+<<<<<<< HEAD
 #### We have first class support with devpods, check out the [devpods documentation](https://devpod.sh/docs/what-is-devpod) to get started.
 0. Clone this repository
 1. Install [DevPods](https://devpod.sh)
+=======
+#### We have first class support with devpods, check out the [devpods documentation](https://devpods.dev/docs/getting-started/installation) to get started.
+0. Clone this repository
+1. Install [DevPods](https://devpods.dev/docs/getting-started/installation)
+>>>>>>> cc79df764b7146b9096c3925720b30b59f0d8092
 2. Create a new devpod with the following command:
    ```
    devpod up . --id heapdog-intellij --provider docker --ide intellij
