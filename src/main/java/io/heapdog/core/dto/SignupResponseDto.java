@@ -5,6 +5,7 @@ import lombok.*;
 
 @Getter
 @Setter
+@Builder
 public class SignupResponseDto {
     private Long id;
     private String username;
