@@ -19,11 +19,15 @@ The easiest way to get started is using Docker:
 ```bash
 # Start the development environment
 docker compose up
+# or using Make
+make dev
 
 # Access the application at http://localhost:8080
 ```
 
 For detailed Docker setup instructions, see [DOCKER.md](DOCKER.md).
+
+For a quick command reference, see [DOCKER-QUICKREF.md](DOCKER-QUICKREF.md) or run `make help`.
 
 ### Using VS Code Dev Container
 

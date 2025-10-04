@@ -28,6 +28,9 @@ FROM eclipse-temurin:24-jre-noble
 
 WORKDIR /app
 
+# Install curl for healthcheck
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
 # Create non-root user
 RUN groupadd -r heapdog && useradd -r -g heapdog heapdog
 
