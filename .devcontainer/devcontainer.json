@@ -1,0 +1,27 @@
+{
+  "name": "Spring Boot Dev Container",
+  "dockerComposeFile": [
+    "../compose.yml"
+  ],
+  "service": "devcontainer",
+  "workspaceFolder": "/home/${localEnv:USER}/heapdog",
+  "remoteUser": "${localEnv:USER}",
+  "forwardPorts": [8080],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-java-pack",
+        "vmware.vscode-boot-dev-pack",
+        "richardwillis.vscode-gradle"
+      ]
+    },
+    "jetbrains": {
+      "plugins": [
+        "org.jetbrains.plugins.java",
+        "org.jetbrains.plugins.gradle",
+        "org.jetbrains.plugins.spring",
+        "org.jetbrains.plugins.spring.boot",
+      ]
+    }
+  }
+}
