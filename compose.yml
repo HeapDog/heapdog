@@ -1,0 +1,81 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: heapdog-postgres
+    environment:
+      POSTGRES_DB: heapdog
+      POSTGRES_USER: heapdog
+      POSTGRES_PASSWORD: heapdog_secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U heapdog"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - heapdog-network
+
+  # Development Application Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: heapdog-app-dev
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: heapdog
+      DB_USER: heapdog
+      DB_PASSWORD: heapdog_secret
+      JWT_SECRET: dev-secret-key-change-in-production-minimum-32-characters-required
+      BCRYPT_SALT_ROUNDS: 10
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/workspace:cached
+      - gradle-cache:/home/vscode/.gradle
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - heapdog-network
+    command: ./gradlew bootRun --no-daemon
+
+  # Production Application Service (for testing production builds)
+  app-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: heapdog-app-prod
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: heapdog
+      DB_USER: heapdog
+      DB_PASSWORD: heapdog_secret
+      JWT_SECRET: prod-secret-key-change-in-production-minimum-32-characters-required
+      BCRYPT_SALT_ROUNDS: 10
+    ports:
+      - "8081:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - heapdog-network
+    profiles:
+      - production
+
+volumes:
+  postgres-data:
+    name: heapdog-postgres-data
+  gradle-cache:
+    name: heapdog-gradle-cache
+
+networks:
+  heapdog-network:
+    name: heapdog-network
+    driver: bridge

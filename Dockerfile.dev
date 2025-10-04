@@ -1,0 +1,42 @@
+# Development Dockerfile
+FROM eclipse-temurin:24-jdk-noble
+
+# Install essential development tools
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    wget \
+    unzip \
+    vim \
+    nano \
+    postgresql-client \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create a non-root user for development
+ARG USERNAME=vscode
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+
+RUN groupadd --gid $USER_GID $USERNAME \
+    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
+    && mkdir -p /home/$USERNAME/.gradle \
+    && chown -R $USER_UID:$USER_GID /home/$USERNAME
+
+# Set up workspace
+WORKDIR /workspace
+
+# Copy gradle wrapper files for dependency caching
+COPY --chown=$USER_UID:$USER_GID gradle gradle
+COPY --chown=$USER_UID:$USER_GID gradlew gradlew.bat settings.gradle build.gradle ./
+
+# Download dependencies (this layer will be cached)
+RUN ./gradlew dependencies --no-daemon || true
+
+# Switch to non-root user
+USER $USERNAME
+
+# Expose application port
+EXPOSE 8080
+
+# Default command for development
+CMD ["./gradlew", "bootRun", "--no-daemon"]
