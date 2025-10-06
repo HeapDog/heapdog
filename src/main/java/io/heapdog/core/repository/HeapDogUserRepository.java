@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface HeapDogUserRepository extends JpaRepository<HeapDogUser, Long> {
     Optional<HeapDogUser> findByUsername(String username);
+    Optional<HeapDogUser> findByEmail(String email);
 }

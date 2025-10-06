@@ -1,0 +1,17 @@
+ssh key configure
+
+1. ls -al ~/.ssh
+2. eval "$(ssh-agent -s)"
+3. ssh-add ~/.ssh/id_rsa
+4. ssh -T git@github.com
+
+
+At the start of your day, or before you begin new work:
+
+Go to dev: git checkout dev
+
+Get the latest team updates: git pull origin dev
+
+Go back to your feature branch: git checkout feature/emon/password-recovery
+
+Rebase your branch: git rebase dev
