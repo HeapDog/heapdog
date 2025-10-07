@@ -23,9 +23,26 @@ jobs:
       - name: Build services
         run: docker compose build test
 
-      - name: Run tests
+      - name: Run tests with coverage
         run: docker compose up --abort-on-container-exit --exit-code-from test test
 
-      - name: Cleanup
-        if: always()
-        run: docker compose down -v
+      - name: Copy coverage report from container
+        run: |
+          CONTAINER_ID=$(docker compose ps -q test)
+          docker cp $CONTAINER_ID:/home/gradle/app/build/reports/jacoco/test ./jacoco-report
+
+      - name: Show coverage summary
+        run: |
+          COVERED=$(grep -o 'covered="[0-9]*"' ./jacoco-report/jacocoTestReport.xml | awk -F\" '{sum+=$2} END {print sum}')
+          MISSED=$(grep -o 'missed="[0-9]*"' ./jacoco-report/jacocoTestReport.xml | awk -F\" '{sum+=$2} END {print sum}')
+          TOTAL=$((COVERED + MISSED))
+          PERCENT=$((100 * COVERED / TOTAL))
+          echo "==== COVERAGE SUMMARY ===="
+          echo "Lines covered: $COVERED / $TOTAL ($PERCENT%)"
+          echo "=========================="
+
+      - name: Upload coverage report (HTML)
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: jacoco-report
