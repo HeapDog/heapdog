@@ -2,6 +2,7 @@ package io.heapdog.core.exception;
 
 
 import io.heapdog.core.dto.APIError;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ import java.util.List;
 @Slf4j
 public class GlobalControllerAdvice {
 
-    @ExceptionHandler(exception = Exception.class)
+    @ExceptionHandler(exception = MethodArgumentNotValidException.class)
     ResponseEntity<APIError> handleValidationExceptions(
             MethodArgumentNotValidException ex,
             HttpServletRequest request
@@ -105,5 +106,20 @@ public class GlobalControllerAdvice {
                 .path(request.getRequestURI())
                 .build();
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
+    }
+
+    @ExceptionHandler(exception = EntityNotFoundException.class)
+    ResponseEntity<APIError> handleEntityNotFoundException(EntityNotFoundException ex, HttpServletRequest request) {
+        log.warn(ex.toString());
+        APIError errorResponse = APIError
+                .builder()
+                .timestamp(Instant.now())
+                .status(HttpStatus.NOT_FOUND.value())
+                .error(HttpStatus.NOT_FOUND.getReasonPhrase())
+                .code("NOT_FOUND")
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 }

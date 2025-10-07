@@ -7,6 +7,7 @@ import io.heapdog.core.dto.SignupRequestDto;
 import io.heapdog.core.dto.SignupResponseDto;
 import io.heapdog.core.service.HeapDogUserService;
 import com.nimbusds.jose.JOSEException;
+import io.heapdog.core.service.JwtAuthenticationService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,17 +20,17 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final HeapDogUserService service;
+    private final JwtAuthenticationService jwtService;
 
     @PostMapping("/signin")
     ResponseEntity<SigninResponseDto> signin(@Valid @RequestBody SigninRequestDto dto) throws JOSEException {
-        SigninResponseDto res = service.authenticate(dto);
+        SigninResponseDto res = jwtService.authenticate(dto);
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 
     @PostMapping("/signup")
     ResponseEntity<SignupResponseDto> signup(@Valid @RequestBody SignupRequestDto dto) {
         SignupResponseDto res = service.createUser(dto);
-//        var res = new SignupResponseDto(1L, "username", "dklfj");
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 
