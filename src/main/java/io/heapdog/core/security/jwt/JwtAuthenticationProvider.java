@@ -29,7 +29,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
             HeapDogUser user = repository.findByUsername(claimsSet.getSubject())
                     .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
             SecurityUser securityUser = new SecurityUser(user);
-            return JwtAuthenticationToken.authenticated(securityUser.getUsername(), securityUser.getAuthorities());
+            return JwtAuthenticationToken.authenticated(securityUser, securityUser.getAuthorities());
         } catch (ParseException | JOSEException | JwtValidationFailedException e) {
             throw new JwtValidationFailedException("Invalid token");
         }
