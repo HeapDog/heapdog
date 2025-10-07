@@ -30,24 +30,8 @@ import java.util.concurrent.TimeUnit;
 public class HeapDogUserService {
 
     private final HeapDogUserRepository repository;
-    private final AuthenticationManager manager;
-    private final JWTUtils jwtUtils;
     private final UserMapper mapper;
     private final PasswordEncoder encoder;
-
-    public SigninResponseDto authenticate(SigninRequestDto dto) throws JOSEException {
-        Authentication unauthenticated = UsernamePasswordAuthenticationToken
-                .unauthenticated(dto.getUsername(), dto.getPassword());
-        Authentication authenticated = manager.authenticate(unauthenticated);
-        JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-                .subject(authenticated.getName())
-                .expirationTime(new Date(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(60)))
-                .build();
-        return SigninResponseDto
-                .builder()
-                .token(jwtUtils.generateToken(claimsSet))
-                .build();
-    }
 
     public SignupResponseDto createUser(@Valid SignupRequestDto dto) {
         dto.setPassword(encoder.encode(dto.getPassword()));
