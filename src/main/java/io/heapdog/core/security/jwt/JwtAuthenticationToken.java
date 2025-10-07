@@ -35,4 +35,15 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
     public Object getPrincipal() {
         return this.principal;
     }
+
+    @Override
+    public void eraseCredentials() {
+        // Erase the token
+        super.eraseCredentials();
+        this.token = null;
+        // Erase the password in principal if it's a SecurityUser
+        if (this.principal instanceof SecurityUser sc) {
+            sc.erasePassword();
+        }
+    }
 }
