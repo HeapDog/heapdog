@@ -29,11 +29,11 @@ RUN useradd -m -s /bin/bash -u $UID $USER && \
 USER $USER
 WORKDIR /home/$USER
 
+ENV GRADLE_USER_HOME=/home/$USER/.gradle
+
 # Install SDKMAN
 RUN curl -s "https://get.sdkman.io" | bash && \
     bash -c "source /home/$USER/.sdkman/bin/sdkman-init.sh && sdk install java 25-amzn && sdk install gradle"
-
-RUN bash -c "source /home/$USER/.sdkman/bin/sdkman-init.sh && sdk install java 25-amzn && sdk install gradle"
 
 EXPOSE 8080
 

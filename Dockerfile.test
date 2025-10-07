@@ -1,0 +1,9 @@
+FROM gradle:9.1.0-jdk25-corretto AS test
+
+WORKDIR /home/gradle/app
+
+COPY . .
+
+ENV SPRING_PROFILES_ACTIVE=test
+
+CMD ["./gradlew", "clean", "test"]
