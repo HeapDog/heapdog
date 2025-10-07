@@ -1,29 +1,19 @@
 package io.heapdog.core.service;
 
 
-import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jwt.JWTClaimsSet;
 import io.heapdog.core.UserMapper;
-import io.heapdog.core.dto.SigninRequestDto;
-import io.heapdog.core.dto.SigninResponseDto;
 import io.heapdog.core.dto.SignupRequestDto;
 import io.heapdog.core.dto.SignupResponseDto;
 import io.heapdog.core.exception.DuplicateUsernameException;
 import io.heapdog.core.model.HeapDogUser;
 import io.heapdog.core.repository.HeapDogUserRepository;
-import io.heapdog.core.security.jwt.JWTUtils;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 @Service
 @AllArgsConstructor
