@@ -43,7 +43,8 @@ services:
       SPRING_PROFILES_ACTIVE: test
     volumes:
       - .:/home/gradle/app
-    command: ["./gradlew", "clean", "test", "--info"]
+      - ./build/reports:/home/gradle/app/build/reports
+    command: ["./gradlew", "test", "jacocoTestReport", "--info"]
 
 volumes:
   db_data:
