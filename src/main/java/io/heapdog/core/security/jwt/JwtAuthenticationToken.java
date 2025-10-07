@@ -17,7 +17,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
         setAuthenticated(authenticated);
     }
 
-    public static JwtAuthenticationToken authenticated(Object principal, Collection<? extends GrantedAuthority> authorities) {
+    public static JwtAuthenticationToken authenticated(SecurityUser principal, Collection<? extends GrantedAuthority> authorities) {
         return new JwtAuthenticationToken(principal, null, authorities, true);
     }
 
