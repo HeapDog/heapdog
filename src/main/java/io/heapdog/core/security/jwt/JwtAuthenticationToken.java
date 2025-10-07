@@ -1,5 +1,6 @@
 package io.heapdog.core.security.jwt;
 
+import io.heapdog.core.security.SecurityUser;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
