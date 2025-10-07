@@ -32,4 +32,10 @@ public class HeapDogUser {
         ROLE_USER,
         ROLE_ADMIN
     };
+
+
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    @ToString.Exclude
+    private Set<Language> languages = new HashSet<>();
 }
