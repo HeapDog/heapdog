@@ -9,6 +9,7 @@ services:
     volumes:
       - .:/home/${USER}/heapdog:cached
       - jetbrains_cache:/home/${USER}/.cache/JetBrains
+      - vscode_server:/home/${USER}/.vscode-server
     ports:
       - 8080:8080
     env_file:
@@ -32,6 +33,20 @@ services:
     ports:
       - 5432:5432
 
+
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    working_dir: /home/gradle/app
+    environment:
+      SPRING_PROFILES_ACTIVE: test
+    volumes:
+      - .:/home/gradle/app
+      - ./build/reports:/home/gradle/app/build/reports
+    command: ["./gradlew", "test", "jacocoTestReport", "--info"]
+
 volumes:
   db_data:
   jetbrains_cache:
+  vscode_server:

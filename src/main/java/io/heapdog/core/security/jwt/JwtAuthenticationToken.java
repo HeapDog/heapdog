@@ -1,5 +1,6 @@
 package io.heapdog.core.security.jwt;
 
+import io.heapdog.core.security.SecurityUser;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -17,7 +18,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
         setAuthenticated(authenticated);
     }
 
-    public static JwtAuthenticationToken authenticated(Object principal, Collection<? extends GrantedAuthority> authorities) {
+    public static JwtAuthenticationToken authenticated(SecurityUser principal, Collection<? extends GrantedAuthority> authorities) {
         return new JwtAuthenticationToken(principal, null, authorities, true);
     }
 
