@@ -27,8 +27,4 @@ public class SecurityUser implements UserDetails {
     public String getUsername() {
         return user.getUsername();
     }
-
-    public void erasePassword() {
-        user.setPassword(null);
-    }
 }
