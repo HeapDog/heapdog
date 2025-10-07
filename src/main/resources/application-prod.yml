@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: heapdog
+  datasource:
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    driver-class-name: org.postgresql.Driver
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+bcrypt:
+  strength: ${BCRYPT_SALT_ROUNDS:10}
+
+jwt:
+  secret:${JWT_SECRET}
+
+logging:
+  level:
+    org.springframework.security: warn
