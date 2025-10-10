@@ -3,6 +3,7 @@ package io.heapdog.core.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,6 +23,7 @@ public class HeapDogUser {
     private String username;
     private String email;
     private String password;
+
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
