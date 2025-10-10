@@ -1,10 +1,7 @@
 package io.heapdog.core.controller;
 
 
-import io.heapdog.core.dto.SigninRequestDto;
-import io.heapdog.core.dto.SigninResponseDto;
-import io.heapdog.core.dto.SignupRequestDto;
-import io.heapdog.core.dto.SignupResponseDto;
+import io.heapdog.core.dto.*;
 import io.heapdog.core.service.HeapDogUserService;
 import com.nimbusds.jose.JOSEException;
 import io.heapdog.core.service.JwtAuthenticationService;
@@ -32,6 +29,22 @@ public class AuthController {
     ResponseEntity<SignupResponseDto> signup(@Valid @RequestBody SignupRequestDto dto) {
         SignupResponseDto res = service.createUser(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
+    }
+
+    @PostMapping("/reset")
+    public ResponseEntity<PasswordResetResponseDto> requestPasswordReset(@Valid @RequestBody PasswordResetRequestDto dto) {
+
+        PasswordResetResponseDto res = service.generatePasswordResetOtp(dto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(res);
+    }
+
+    @PatchMapping("/reset/verify")
+    public ResponseEntity<PasswordResetResponseDto> verifyOtpAndResetPassword(@Valid @RequestBody PasswordResetVerifyRequestDto dto){
+
+        PasswordResetResponseDto res = service.verifyOtpAndResetPassword(dto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 
 }
