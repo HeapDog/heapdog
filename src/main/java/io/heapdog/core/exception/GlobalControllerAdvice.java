@@ -2,7 +2,6 @@ package io.heapdog.core.exception;
 
 
 import io.heapdog.core.dto.APIError;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -12,6 +11,7 @@ import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import io.heapdog.core.exception.UserNotFoundException;
 
 import java.time.Instant;
 import java.util.List;
@@ -107,16 +107,29 @@ public class GlobalControllerAdvice {
                 .build();
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
     }
+    @ExceptionHandler(exception = InvalidOtpException.class)
+    ResponseEntity<APIError> handleInvalidOtpException(InvalidOtpException ex, HttpServletRequest request) {
+        log.warn(ex.toString());
+        APIError errorResponse = APIError
+                .builder()
+                .timestamp(Instant.now())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .code("Invalid_OTP")
+                .message(ex.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
 
-    @ExceptionHandler(exception = EntityNotFoundException.class)
-    ResponseEntity<APIError> handleEntityNotFoundException(EntityNotFoundException ex, HttpServletRequest request) {
+    @ExceptionHandler(exception = UserNotFoundException.class)
+    public ResponseEntity<APIError> handleUserNotFoundException(UserNotFoundException ex, HttpServletRequest request) {
         log.warn(ex.toString());
         APIError errorResponse = APIError
                 .builder()
                 .timestamp(Instant.now())
                 .status(HttpStatus.NOT_FOUND.value())
                 .error(HttpStatus.NOT_FOUND.getReasonPhrase())
-                .code("NOT_FOUND")
+                .code("USER_NOT_FOUND")
                 .message(ex.getMessage())
                 .path(request.getRequestURI())
                 .build();
