@@ -24,7 +24,6 @@ public class HeapDogUser {
     private String email;
     private String password;
 
-
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     @Builder.Default
