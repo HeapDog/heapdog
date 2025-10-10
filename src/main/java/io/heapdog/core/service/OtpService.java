@@ -20,7 +20,7 @@ public class OtpService {
     public String generateOtp(HeapDogUser user){
         otpRepository.deleteByUser(user);
 
-        String otpString = String.format("%06d", secureRandom.nextInt(999999));
+        String otpString = String.format("%06d", secureRandom.nextInt(1000000));
 
         PasswordResetOtp otp =  PasswordResetOtp.builder()
                 .user(user)
