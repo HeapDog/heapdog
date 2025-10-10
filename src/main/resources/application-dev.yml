@@ -19,7 +19,7 @@ bcrypt:
   strength: ${BCRYPT_SALT_ROUNDS:10}
 
 jwt:
-  secret:${JWT_SECRET}
+  secret: ${JWT_SECRET}
 
 logging:
   level:
