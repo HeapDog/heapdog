@@ -5,6 +5,7 @@ import io.heapdog.core.dto.*;
 import io.heapdog.core.service.HeapDogUserService;
 import com.nimbusds.jose.JOSEException;
 import io.heapdog.core.service.JwtAuthenticationService;
+import io.heapdog.core.service.OtpService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ public class AuthController {
 
     private final HeapDogUserService service;
     private final JwtAuthenticationService jwtService;
+    private final OtpService otpService;
 
     @PostMapping("/signin")
     ResponseEntity<SigninResponseDto> signin(@Valid @RequestBody SigninRequestDto dto) throws JOSEException {
@@ -34,7 +36,7 @@ public class AuthController {
     @PostMapping("/reset")
     public ResponseEntity<PasswordResetResponseDto> requestPasswordReset(@Valid @RequestBody PasswordResetRequestDto dto) {
 
-        PasswordResetResponseDto res = service.generatePasswordResetOtp(dto);
+        PasswordResetResponseDto res = otpService.generatePasswordResetOtp(dto);
 
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
@@ -42,7 +44,7 @@ public class AuthController {
     @PatchMapping("/reset/verify")
     public ResponseEntity<PasswordResetResponseDto> verifyOtpAndResetPassword(@Valid @RequestBody PasswordResetVerifyRequestDto dto){
 
-        PasswordResetResponseDto res = service.verifyOtpAndResetPassword(dto);
+        PasswordResetResponseDto res = otpService.verifyOtpAndResetPassword(dto);
 
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
