@@ -7,8 +7,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @SpringBootApplication
@@ -21,20 +24,37 @@ public class HeapDogApplication {
 
 
     @Bean
-    CommandLineRunner commandLineRunner(HeapDogUserRepository repository,
-                                        PasswordEncoder encoder) {
+    CommandLineRunner commandLineRunner(HeapDogUserRepository userRepository, PasswordEncoder encoder) {
 
-        log.info("Running command line runner");
+        log.info("Running command line runner to seed database...");
         return _ -> {
-            var user = HeapDogUser
+
+            HeapDogUser demoUser = HeapDogUser
                     .builder()
-                    .username("parthokr")
-                    .email("partho.kr@gmail.com")
-                    .password(encoder.encode("1234"))
-                    .role(Set.of(HeapDogUser.Role.ROLE_USER, HeapDogUser.Role.ROLE_ADMIN))
+                    .username("demo")
+                    .email("demo@example.com")
+                    .password(encoder.encode("demo1234"))
+                    .role(new HashSet<>(Set.of(HeapDogUser.Role.ROLE_USER, HeapDogUser.Role.ROLE_ADMIN)))
                     .build();
 
-            repository.save(user);
+            HeapDogUser standardUser = HeapDogUser
+                    .builder()
+                    .username("user")
+                    .email("user@example.com")
+                    .password(encoder.encode("user1234"))
+                    .role(new HashSet<>(Set.of(HeapDogUser.Role.ROLE_USER)))
+                    .build();
+
+            HeapDogUser adminUser = HeapDogUser
+                    .builder()
+                    .username("admin")
+                    .email("admin@example.com")
+                    .password(encoder.encode("admin1234"))
+                    .role(new HashSet<>(Set.of(HeapDogUser.Role.ROLE_ADMIN)))
+                    .build();
+
+            userRepository.saveAll(List.of(demoUser, standardUser, adminUser));
+            log.info("Database seeded with 3 users.");
         };
     }
 
