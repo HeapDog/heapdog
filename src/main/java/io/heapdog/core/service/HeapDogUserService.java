@@ -29,8 +29,6 @@ public class HeapDogUserService {
     private final HeapDogUserRepository repository;
     private final UserMapper mapper;
     private final PasswordEncoder encoder;
-    private final PasswordResetOtpRepository otpRepository;
-    private final OtpService otpService;
 
     public SignupResponseDto createUser(@Valid SignupRequestDto dto) {
         dto.setPassword(encoder.encode(dto.getPassword()));
@@ -43,40 +41,4 @@ public class HeapDogUserService {
             throw new DuplicateUsernameException("Username already exists: " + dto.getUsername());
         }
     }
-
-    public PasswordResetResponseDto generatePasswordResetOtp(PasswordResetRequestDto dto) {
-        // Find the user by email.
-        HeapDogUser user = repository.findByEmail(dto.getEmail())
-                .orElseThrow(() -> new UserNotFoundException("No account associated with the provided email."));
-
-        String otpString = otpService.generateOtp(user);
-
-        log.info("MOCK EMAIL: OTP for user {} is: {}", user.getEmail(), otpString);
-
-        return PasswordResetResponseDto.builder()
-                .message("OTP sent successfully (mock).")
-                .build();
-    }
-
-    public PasswordResetResponseDto verifyOtpAndResetPassword(PasswordResetVerifyRequestDto dto) {
-        HeapDogUser user = repository.findByEmail(dto.getEmail())
-                .orElseThrow(() -> new UserNotFoundException("No account associated with the provided email."));
-
-        PasswordResetOtp otp = otpRepository.findByUser(user)
-                .orElseThrow(() -> new InvalidOtpException("No OTP found for this user. Please request a new one."));
-
-        if (!otp.getOtp().equals(dto.getOtp()) || LocalDateTime.now().isAfter(otp.getExpiresAt())) {
-            throw new InvalidOtpException("The OTP provided is incorrect or has expired.");
-        }
-
-        user.setPassword(encoder.encode(dto.getNewPassword()));
-        repository.save(user);
-
-        otpRepository.delete(otp);
-
-        return PasswordResetResponseDto.builder()
-                .message("Password reset successful.")
-                .build();
-    }
-
 }
