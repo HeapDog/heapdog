@@ -56,8 +56,9 @@ public class AuthControllerIntegrationTest {
     @Test
     void whenRequestPasswordReset_withValidEmail_shouldReturnOk() throws Exception {
 
-        PasswordResetRequestDto requestDto = new PasswordResetRequestDto();
-        requestDto.setEmail("test@example.com");
+        PasswordResetRequestDto requestDto = PasswordResetRequestDto.builder()
+                .email("test@example.com")
+                .build();
 
         mockMvc.perform(post("/auth/reset")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -75,9 +76,10 @@ public class AuthControllerIntegrationTest {
 
     @Test
     void whenRequestPasswordReset_withInvalidEmail_shouldReturnNotFound() throws Exception {
-        
-        PasswordResetRequestDto requestDto = new PasswordResetRequestDto();
-        requestDto.setEmail("nobody@example.com");
+
+        PasswordResetRequestDto requestDto = PasswordResetRequestDto.builder()
+                .email("nobody@example.com")
+                .build();
 
         mockMvc.perform(post("/auth/reset")
                         .contentType(MediaType.APPLICATION_JSON)
