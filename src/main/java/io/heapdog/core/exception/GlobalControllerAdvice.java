@@ -75,7 +75,7 @@ public class GlobalControllerAdvice {
                 .message("Invalid username or password")
                 .path(request.getRequestURI())
                 .build();
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
 
     @ExceptionHandler(exception = JwtValidationFailedException.class)
