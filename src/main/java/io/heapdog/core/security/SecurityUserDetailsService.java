@@ -1,7 +1,7 @@
 package io.heapdog.core.security;
 
-import io.heapdog.core.model.HeapDogUser;
-import io.heapdog.core.repository.HeapDogUserRepository;
+import io.heapdog.core.feature.user.HeapDogUser;
+import io.heapdog.core.feature.user.HeapDogUserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

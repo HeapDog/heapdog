@@ -1,7 +1,6 @@
 package io.heapdog.core.security.jwt;
 
-import io.heapdog.core.exception.JwtValidationFailedException;
-import io.heapdog.core.service.JwtAuthenticationService;
+import io.heapdog.core.feature.auth.JwtAuthenticationService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

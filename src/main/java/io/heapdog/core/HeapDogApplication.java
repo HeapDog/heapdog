@@ -1,13 +1,12 @@
 package io.heapdog.core;
 
-import io.heapdog.core.model.HeapDogUser;
-import io.heapdog.core.repository.HeapDogUserRepository;
+import io.heapdog.core.feature.user.HeapDogUser;
+import io.heapdog.core.feature.user.HeapDogUserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.HashSet;

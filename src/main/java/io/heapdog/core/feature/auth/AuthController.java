@@ -1,0 +1,49 @@
+package io.heapdog.core.feature.auth;
+
+
+import com.nimbusds.jose.JOSEException;
+import io.heapdog.core.feature.user.HeapDogUserService;
+import io.heapdog.core.feature.user.SignupRequestDto;
+import io.heapdog.core.feature.user.SignupResponseDto;
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/auth")
+@AllArgsConstructor
+public class AuthController {
+
+    private final HeapDogUserService service;
+    private final JwtAuthenticationService jwtService;
+
+    @PostMapping("/signin")
+    ResponseEntity<SigninResponseDto> signin(@Valid @RequestBody SigninRequestDto dto) throws JOSEException {
+        SigninResponseDto res = jwtService.authenticate(dto);
+        return ResponseEntity.status(HttpStatus.OK).body(res);
+    }
+
+    @PostMapping("/signup")
+    ResponseEntity<SignupResponseDto> signup(@Valid @RequestBody SignupRequestDto dto) {
+        SignupResponseDto res = service.createUser(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(res);
+    }
+
+    @PostMapping("/reset")
+    public ResponseEntity<PasswordResetResponseDto> requestPasswordReset(@Valid @RequestBody PasswordResetRequestDto dto) {
+
+        PasswordResetResponseDto res = service.generatePasswordResetOtp(dto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(res);
+    }
+
+    @PatchMapping("/reset/verify")
+    public ResponseEntity<PasswordResetResponseDto> verifyOtpAndResetPassword(@Valid @RequestBody PasswordResetVerifyRequestDto dto){
+
+        PasswordResetResponseDto res = service.verifyOtpAndResetPassword(dto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(res);
+    }
+}
