@@ -15,7 +15,7 @@ public class SecurityUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return AuthorityUtils.createAuthorityList(user.getRole().stream().map(HeapDogUser.Role::name).toList());
+        return AuthorityUtils.createAuthorityList(user.getRole().name());
     }
 
     @Override

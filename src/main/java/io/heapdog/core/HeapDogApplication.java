@@ -33,7 +33,7 @@ public class HeapDogApplication {
                     .username("demo")
                     .email("demo@example.com")
                     .password(encoder.encode("demo1234"))
-                    .role(new HashSet<>(Set.of(HeapDogUser.Role.ROLE_USER, HeapDogUser.Role.ROLE_ADMIN)))
+                    .role(HeapDogUser.Role.ROLE_USER)
                     .build();
 
             HeapDogUser standardUser = HeapDogUser
@@ -41,7 +41,7 @@ public class HeapDogApplication {
                     .username("user")
                     .email("user@example.com")
                     .password(encoder.encode("user1234"))
-                    .role(new HashSet<>(Set.of(HeapDogUser.Role.ROLE_USER)))
+                    .role(HeapDogUser.Role.ROLE_USER)
                     .build();
 
             HeapDogUser adminUser = HeapDogUser
@@ -49,10 +49,10 @@ public class HeapDogApplication {
                     .username("admin")
                     .email("admin@example.com")
                     .password(encoder.encode("admin1234"))
-                    .role(new HashSet<>(Set.of(HeapDogUser.Role.ROLE_ADMIN)))
+                    .role(HeapDogUser.Role.ROLE_ADMIN)
                     .build();
 
-            userRepository.saveAll(List.of(demoUser, standardUser, adminUser));
+//            userRepository.saveAll(List.of(demoUser, standardUser, adminUser));
             log.info("Database seeded with 3 users.");
         };
     }

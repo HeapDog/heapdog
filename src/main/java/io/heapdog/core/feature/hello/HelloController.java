@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class HelloController {
 
     @GetMapping("/private")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER')")
     String hello(Authentication authentication) {
-        return "Hello, " + authentication.getName() + "!";
+        return "Hello, " + authentication.getName() + "!!";
     }
 }

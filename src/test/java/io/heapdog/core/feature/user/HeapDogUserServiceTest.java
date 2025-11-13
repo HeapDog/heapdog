@@ -64,7 +64,7 @@ class HeapDogUserServiceTest {
                 .username("test")
                 .email("test@example.com")
                 .password("")
-                .role(Set.of(HeapDogUser.Role.ROLE_USER))
+                .role(HeapDogUser.Role.ROLE_USER)
                 .build();
 
         when(encoder.encode(any(CharSequence.class))).thenReturn("password");
