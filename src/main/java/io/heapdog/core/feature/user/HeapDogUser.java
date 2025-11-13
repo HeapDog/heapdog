@@ -1,5 +1,6 @@
 package io.heapdog.core.feature.user;
 
+import io.heapdog.core.shared.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -7,6 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Table(name = "heapdog_user")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -18,15 +20,18 @@ public class HeapDogUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true)
+
+    @Column(name = "username", unique = true)
     private String username;
+
+    @Column(name = "email", unique = true)
     private String email;
+
+    @Column(name = "password")
     private String password;
 
-    @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
-    @Builder.Default
-    private Set<Role> role = new HashSet<>();
+    private Role role = Role.ROLE_USER;
 
     public enum Role {
         ROLE_USER,

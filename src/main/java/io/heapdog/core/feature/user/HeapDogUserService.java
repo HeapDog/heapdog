@@ -26,7 +26,7 @@ public class HeapDogUserService {
     public SignupResponseDto createUser(@Valid SignupRequestDto dto) {
         dto.setPassword(encoder.encode(dto.getPassword()));
         HeapDogUser user = mapper.toEntity(dto);
-        user.setRole(Set.of(HeapDogUser.Role.ROLE_USER));
+        user.setRole(HeapDogUser.Role.ROLE_USER);
         try {
             HeapDogUser saved = repository.save(user);
             return mapper.toDto(saved);

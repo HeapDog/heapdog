@@ -40,7 +40,7 @@ public class AuthController {
     }
 
     @PatchMapping("/reset/verify")
-    public ResponseEntity<PasswordResetResponseDto> verifyOtpAndResetPassword(@Valid @RequestBody PasswordResetVerifyRequestDto dto){
+    public ResponseEntity<PasswordResetResponseDto> verifyOtpAndResetPassword(@Valid @RequestBody PasswordResetVerifyRequestDto dto) {
 
         PasswordResetResponseDto res = service.verifyOtpAndResetPassword(dto);
 
