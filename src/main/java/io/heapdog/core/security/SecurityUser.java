@@ -1,6 +1,6 @@
 package io.heapdog.core.security;
 
-import io.heapdog.core.model.HeapDogUser;
+import io.heapdog.core.feature.user.HeapDogUser;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;

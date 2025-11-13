@@ -1,11 +1,10 @@
 package io.heapdog.core.security.jwt;
 
-import io.heapdog.core.exception.JwtValidationFailedException;
-import io.heapdog.core.model.HeapDogUser;
-import io.heapdog.core.repository.HeapDogUserRepository;
-import io.heapdog.core.security.SecurityUser;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jwt.JWTClaimsSet;
+import io.heapdog.core.feature.user.HeapDogUser;
+import io.heapdog.core.feature.user.HeapDogUserRepository;
+import io.heapdog.core.security.SecurityUser;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
