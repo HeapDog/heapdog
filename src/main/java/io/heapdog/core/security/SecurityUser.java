@@ -14,6 +14,11 @@ public class SecurityUser implements UserDetails {
     private final HeapDogUser user;
 
     @Override
+    public boolean isEnabled() {
+        return user.getEnabled();
+    }
+
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return AuthorityUtils.createAuthorityList(user.getRole().name());
     }

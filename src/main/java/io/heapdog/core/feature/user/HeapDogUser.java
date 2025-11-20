@@ -33,6 +33,9 @@ public class HeapDogUser {
     @Enumerated(EnumType.STRING)
     private Role role = Role.ROLE_USER;
 
+    @Column(name = "is_enabled")
+    private Boolean enabled;
+
     public enum Role {
         ROLE_USER,
         ROLE_ADMIN
