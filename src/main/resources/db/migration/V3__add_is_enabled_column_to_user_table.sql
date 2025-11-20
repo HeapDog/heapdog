@@ -1,0 +1,1 @@
+ALTER TABLE heapdog_user ADD COLUMN is_enabled BOOLEAN DEFAULT FALSE;
