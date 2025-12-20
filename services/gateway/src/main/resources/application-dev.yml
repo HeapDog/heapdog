@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: gateway-service-dev
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: user-service
+              uri: http://${USER_SERVICE_SERVICE_HOST:localhost}:${USER_SERVICE_SERVICE_PORT:8081}
+              predicates:
+                - Path=/users/**
+server:
+  port: ${SERVER_PORT:8080}
+
