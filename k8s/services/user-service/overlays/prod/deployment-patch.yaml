@@ -1,0 +1,13 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+spec:
+  replicas: 2
+  template:
+    spec:
+      containers:
+        - name: user-service
+          image: ghcr.io/heapdog/user-service-prod:latest
+          imagePullPolicy: Always
+
