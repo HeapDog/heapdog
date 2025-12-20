@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: user-service-dev
+
+
+server:
+  port: ${SERVER_PORT:8081}
+logging:
+  level:
+    root: ${LOGGING_LEVEL_ROOT:DEBUG}
