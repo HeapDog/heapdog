@@ -18,6 +18,8 @@ jobs:
       user: ${{ steps.filter.outputs.user }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: dorny/paths-filter@v2
         id: filter
         with:
@@ -82,7 +84,7 @@ jobs:
             git config --global user.name "github-actions[bot]"
             git config --global user.email "github-actions[bot]@users.noreply.github.com"
             git add $FILE_PATH
-            git commit -m "chore(ci): bump ${{ env.SERVICE_NAME }} image to ${{ github.sha }}" -m "Automated commit."
+            git commit -m "chore(ci): bump ${{ env.SERVICE_NAME }} image to ${{ github.sha }} [skip ci]" -m "Automated commit."
             git push origin ${{ github.ref_name }}
           fi
 
@@ -141,7 +143,7 @@ jobs:
             git config --global user.name "github-actions[bot]"
             git config --global user.email "github-actions[bot]@users.noreply.github.com"
             git add $FILE_PATH
-            git commit -m "chore(ci): bump ${{ env.SERVICE_NAME }} image to ${{ github.sha }}" -m "Automated commit."
+            git commit -m "chore(ci): bump ${{ env.SERVICE_NAME }} image to ${{ github.sha }} [skip ci]" -m "Automated commit."
             git push origin ${{ github.ref_name }}
           fi
 
