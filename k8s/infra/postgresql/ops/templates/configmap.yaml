@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-creator-script
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+data:
+  databases.txt: |
+    {{- range .Values.customSetup.databases }}
+    {{ .name }}|{{ .user }}|{{ .passwordKey }}
+    {{- end }}
+
+  ensure-dbs.sh: |
+    #!/bin/bash
+    set -e
+
+    export PGPASSWORD=$SUPER_PASSWORD
+
+    # 1. USE THE ENV VAR WE PASSED IN JOB.YAML
+    HOST="$DB_HOST"
+    echo "Targeting Database Host: $HOST"
+
+    # 2. WAIT FOR CONNECTION
+    echo "Waiting for Postgres to be ready..."
+    until pg_isready -h $HOST -U postgres; do
+      echo "Postgres is unavailable - sleeping"
+      sleep 2
+    done
+    echo "Postgres is up! Starting migration..."
+
+    # 3. RUN THE LOOP
+    while IFS="|" read -r DB_NAME DB_USER DB_PASS_KEY; do
+      [ -z "$DB_NAME" ] && continue
+
+      echo "--- Processing: $DB_NAME ---"
+      USER_PASS=$(cat /etc/secret-volume/$DB_PASS_KEY)
+
+      # Check if user exists
+      EXISTS=$(psql -h $HOST -U postgres -tAc "SELECT 1 FROM pg_roles WHERE rolname='$DB_USER'")
+
+      if [ "$EXISTS" = "1" ]; then
+        # NEW LOGIC: Update password even if user exists (Password Rotation)
+        echo "User $DB_USER exists. Updating password from secret..."
+        psql -h $HOST -U postgres -c "ALTER USER \"$DB_USER\" WITH PASSWORD '$USER_PASS';"
+      else
+        # Logic for new user
+        echo "Creating user $DB_USER..."
+        psql -h $HOST -U postgres -c "CREATE USER \"$DB_USER\" WITH PASSWORD '$USER_PASS';"
+      fi
+
+      # Check if DB exists
+      DB_EXISTS=$(psql -h $HOST -U postgres -tAc "SELECT 1 FROM pg_database WHERE datname='$DB_NAME'")
+      if [ "$DB_EXISTS" = "1" ]; then
+        echo "Database $DB_NAME already exists."
+      else
+        echo "Creating database $DB_NAME..."
+        psql -h $HOST -U postgres -c "CREATE DATABASE \"$DB_NAME\" OWNER \"$DB_USER\";"
+      fi
+    done < /config/databases.txt

@@ -1,0 +1,36 @@
+# -----------------------------------------------------------
+# 1. BITNAMI CHART CONFIGURATION
+# -----------------------------------------------------------
+architecture: standalone
+
+auth:
+  # The secret that contains the password for the 'postgres' superuser.
+  # Bitnami looks for a key named 'postgres-password' inside this secret.
+  existingSecret: postgres-auth-secret
+
+  # We disable the default non-admin user because our "Manager Job"
+  # will handle creating specific users (like user_service) for us.
+  # This keeps the setup cleaner.
+  enablePostgresUser: true
+  database: "postgres"
+  # username: "user"  <-- Removed, we don't need a generic user
+
+primary:
+  persistence:
+    enabled: false # Ephemeral for dev
+
+# -----------------------------------------------------------
+# 2. CUSTOM OPS CONFIGURATION (Used by your Manager Job)
+# -----------------------------------------------------------
+customSetup:
+  authVersion: "7"
+  # IMPORTANT: Check your service name via 'kubectl get svc -n dev'
+  # If your Release Name is 'postgresql-dev', Bitnami usually names
+  # the service 'postgresql-dev-postgresql'
+  dbHost: postgresql-dev
+
+  databases:
+    - name: user_service_db
+      user: user_service
+      # This key must exist inside 'postgres-auth-secret'
+      passwordKey: user-service-password

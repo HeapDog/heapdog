@@ -1,0 +1,66 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: infrastructure-dev
+  namespace: argocd
+spec:
+  generators:
+    - matrix:
+        generators:
+          # 1. The Environment Matrix (Where to deploy)
+          - list:
+              elements:
+                - env: dev
+
+          # 2. The App Inventory (What to deploy)
+          # THIS is the boilerplate you asked for. It gives you total control.
+          - list:
+              elements:
+                # App 1: Postgres (Bitnami)
+                - appName: postgresql
+                  chartRepo: https://charts.bitnami.com/bitnami
+                  chartName: postgresql
+                  chartVersion: 18.1.14
+
+                # App 2: NATS
+                - appName: nats
+                  chartRepo: https://nats-io.github.io/k8s/helm/charts/
+                  chartName: nats
+                  chartVersion: 1.2.4
+
+  template:
+    metadata:
+      name: '{{appName}}-{{env}}'
+    spec:
+      project: default
+      sources:
+        # Source 1: The Remote Helm Chart (Uses variables from Inventory list)
+        - repoURL: '{{chartRepo}}'
+          chart: '{{chartName}}'
+          targetRevision: '{{chartVersion}}'
+          helm:
+            valueFiles:
+              # We map the local folder to the 'appName' defined in the list above
+              - $values/k8s/infra/{{appName}}/values-{{env}}.yaml
+
+        # Source 2: Your Git Repo (for the values file)
+        - repoURL: https://github.com/HeapDog/heapdog.git
+          targetRevision: HEAD
+          ref: values
+
+        - repoURL: https://github.com/HeapDog/heapdog.git
+          targetRevision: HEAD
+          path: k8s/infra/{{appName}}/ops
+          helm:
+            valueFiles:
+              - ../values-{{env}}.yaml
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{env}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+

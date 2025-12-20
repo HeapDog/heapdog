@@ -1,0 +1,31 @@
+# -----------------------------------------------------------
+# 1. NATS CHART CONFIGURATION
+# -----------------------------------------------------------
+# See https://github.com/nats-io/k8s/tree/main/helm/charts/nats
+# for full configuration options.
+
+# We use extraArgs to include the auth config file
+# because 'config.merge' expects a map and cannot handle 'include' directives directly.
+extraArgs:
+  - "-c"
+  - "/etc/nats-auth/auth.conf"
+
+config:
+  cluster:
+    enabled: false
+
+extraVolumes:
+  - name: nats-auth-vol
+    secret:
+      secretName: nats-secret
+
+extraVolumeMounts:
+  - name: nats-auth-vol
+    mountPath: "/etc/nats-auth"
+    readOnly: true
+
+# -----------------------------------------------------------
+# 2. CUSTOM OPS CONFIGURATION
+# -----------------------------------------------------------
+custom:
+  natsSecretName: nats-secret

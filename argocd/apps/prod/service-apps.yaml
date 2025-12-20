@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: microservices-prod
+  namespace: argocd
+spec:
+  generators:
+    - matrix:
+        generators:
+          - list:
+              elements:
+                - env: prod
+          - git:
+              repoURL: https://github.com/HeapDog/heapdog.git
+              revision: HEAD
+              directories:
+                - path: k8s/services/*
+  template:
+    metadata:
+      name: '{{path.basename}}-{{env}}' # Result: user-service-prod
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/HeapDog/heapdog.git
+        targetRevision: HEAD
+        path: '{{path}}/overlays/{{env}}' # k8s/services/user-service/overlays/prod
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{env}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+

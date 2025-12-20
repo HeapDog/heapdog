@@ -1,0 +1,5 @@
+apiVersion: v2
+name: db-manager-ops
+description: Operational jobs for Postgres
+type: application
+version: 1.0.0

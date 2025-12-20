@@ -1,0 +1,36 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-manager-job-{{ .Values.customSetup.authVersion | default "1" }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+    ops.heapdog.io/auth-version: {{ .Values.customSetup.authVersion | quote }}
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: manager
+          image: postgres:15-alpine
+          command: ["/bin/bash", "/config/ensure-dbs.sh"]
+          env:
+            - name: DB_HOST
+              value: {{ .Values.customSetup.dbHost | quote }}
+            - name: SUPER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-auth-secret
+                  key: postgres-password
+          volumeMounts:
+            - name: script-vol
+              mountPath: /config
+            - name: secret-vol
+              mountPath: /etc/secret-volume
+              readOnly: true
+      volumes:
+        - name: script-vol
+          configMap:
+            name: db-creator-script
+        - name: secret-vol
+          secret:
+            secretName: postgres-auth-secret

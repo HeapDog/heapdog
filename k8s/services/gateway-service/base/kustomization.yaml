@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - deployment.yaml
+  - service.yaml
+  - check-deps-job.yaml
+configMapGenerator:
+  - name: gateway-service-cm
+    literals:
+      - SPRING_PROFILES_ACTIVE=PATCH_ME
+      - LOGGING_LEVEL_ROOT=PATCH_ME

@@ -1,0 +1,33 @@
+# -----------------------------------------------------------
+# 1. BITNAMI CHART CONFIGURATION
+# -----------------------------------------------------------
+architecture: standalone
+
+auth:
+  # The secret that contains the password for the 'postgres' superuser.
+  # Bitnami looks for a key named 'postgres-password' inside this secret.
+  existingSecret: postgres-auth-secret
+
+  # We disable the default non-admin user because our "Manager Job"
+  # will handle creating specific users (like user_service) for us.
+  # This keeps the setup cleaner.
+  enablePostgresUser: true
+  database: "postgres"
+  # username: "user"  <-- Removed, we don't need a generic user
+
+primary:
+  persistence:
+    size: 8Gi  # Persistent for prod
+
+# -----------------------------------------------------------
+# 2. CUSTOM OPS CONFIGURATION (Used by your Manager Job)
+# -----------------------------------------------------------
+customSetup:
+  authVersion: "1"
+  dbHost: postgresql-prod
+
+  databases:
+    - name: user_service_db
+      user: user_service
+      # This key must exist inside 'postgres-auth-secret'
+      passwordKey: user-service-password

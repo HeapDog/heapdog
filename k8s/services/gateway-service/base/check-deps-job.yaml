@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: check-deps
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  template:
+    spec:
+      containers:
+        - name: check
+          image: busybox:1.36
+          command: ['sh', '-c', 'echo "Waiting for user-service..."; until nc -z user-service 8080; do sleep 2; done; echo "user-service is up!"']
+      restartPolicy: OnFailure
+
