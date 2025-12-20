@@ -3,6 +3,8 @@ kind: ApplicationSet
 metadata:
   name: infrastructure-prod
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
 spec:
   generators:
     - matrix:
