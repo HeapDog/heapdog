@@ -8,6 +8,6 @@ spec:
     spec:
       containers:
         - name: user-service
-          image: ghcr.io/heapdog/user-service-prod:latest
+          image: ghcr.io/heapdog/user-service-prod:4750aeba80019af49143c980541346a2f0d1f154
           imagePullPolicy: Always
 
