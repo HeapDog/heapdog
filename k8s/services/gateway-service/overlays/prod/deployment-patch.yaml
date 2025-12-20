@@ -8,6 +8,6 @@ spec:
     spec:
       containers:
         - name: gateway-service
-          image: ghcr.io/heapdog/gateway-service-prod:latest
+          image: ghcr.io/heapdog/gateway-service-prod:9ffdeb316200278404add6364852ff486a6470bc
           imagePullPolicy: Always
 
